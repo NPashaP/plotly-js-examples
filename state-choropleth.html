@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Plotly JS Example</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Load plotly.js into the DOM -->
+  <script src='https://cdn.plot.ly/plotly-2.26.0.min.js'></script>
+  <style>
+    #myDiv{
+      width:660px;
+      height:300px;
+      border:1px solid silver;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+  <script>
+    let parser = (d) => d;
+
+    d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/2014_usa_states.csv', parser)
+      .then(rows => {
+        function unpack(rows, key) {
+          return rows.map(function (row) { return row[key]; });
+        }
+        var data = [{
+          type: 'choropleth',
+          locationmode: 'USA-states',
+          locations: unpack(rows, 'Postal'),
+          z: unpack(rows, 'Population'),
+          text: unpack(rows, 'State'),
+          autocolorscale: true
+        }];
+
+        var layout = {
+          // title: '2014 US Popultaion by State',
+          geo: {
+            scope: 'usa',
+            countrycolor: 'rgb(255, 255, 255)',
+            showland: true,
+            landcolor: 'rgb(217, 217, 217)',
+            showlakes: true,
+            lakecolor: 'rgb(255, 255, 255)',
+            subunitcolor: 'rgb(255, 255, 255)',
+            lonaxis: {},
+            lataxis: {}
+          },
+          // width:500,
+          // height:350,
+          margin:{l:0,r:0,t:0,b:0,pad:0},
+          // legend:{visible:false},
+          // showlegend: false
+          showscale: false
+        };
+        Plotly.newPlot("myDiv", data, layout, { showLink: false });
+      });
+
+  </script>
+</body>
+
+</html>
